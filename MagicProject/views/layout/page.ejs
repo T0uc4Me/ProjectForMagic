@@ -11,18 +11,12 @@
         <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
             <div class="container-fluid">
               <ul class="navbar-nav">
-                <li class="nav-item">
-                  <a class="nav-link" href="/">Главная</a>
-                </li>
-               <li class="nav-item">
-                  <a class="nav-link" href="/elems/fire">Огонь</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/elems/wind">Ветер</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/elems/water">Вода</a>
-                </li>
+                <% menu.forEach(function(elem){ %>
+                  <li class="nav-item">
+                  <a class="nav-link"
+                  href="/elems/<%=elem.nick%>"><%=elem.title%></a>
+                  </li>
+                  <% }) %>
               </ul>
             </div>
           </nav>
