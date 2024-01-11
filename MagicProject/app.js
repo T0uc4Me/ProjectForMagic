@@ -24,12 +24,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
+var MongoStore = require('connect-mongo');
 app.use(session({
   secret: "Magic",
   cookie:{maxAge:60*1000},
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: MongoStore.create({mongoUrl: 'mongodb://127.0.0.1/magic'})
 }))
 
 app.use('/', indexRouter);
@@ -50,7 +51,6 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error', {title:"Стихия исчезла..."});
-  res.render('error', {menu:[]});
 });
 
 module.exports = app;
