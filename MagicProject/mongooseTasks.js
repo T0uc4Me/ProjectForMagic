@@ -1,18 +1,13 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1/test');
+mongoose.connect('mongodb://127.0.0.1/test1');
+var Elem = require("./models/magic").Elem
 
-var schema = mongoose.Schema({ name: String })
-schema.methods.noise = function(){
-    console.log(this.get("name") + " издал все звуки стихий")
-}
-const Magic = mongoose.model('Magic', schema);
+var elem = new Elem ({
+    title: "ВодОньЕр",
+    nick: "VodOnEr"
+})
 
-const element = new Magic({ name: 'ВодОньЕтер' });
-
-element.save()
-    .then(() => {
-        element.noise();
+console.log(elem);
+elem.save().then(() => {
+        console.log(elem.title);
     })
-    .catch((err) => {
-        console.error(err);
-    });
