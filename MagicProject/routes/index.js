@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var Elem = require("../models/magic").Elem
-var User = require("./../models/user").User
+
+//var User = require("./../models/user").User
+var db = require('../mySQLConnect.js');
 
 /* GET home page. */
 router.get('/', async (req, res, next) => {
@@ -21,29 +22,28 @@ router.get('/logreg', async function(req, res, next) {
   res.render('logreg', { title: 'Вход',error:null}); 
 });
 
-router.post('/logreg', async function(req, res, next) {
-  const username = req.body.username;
-  const password = req.body.password;
-
-  try {
-      const user = await User.findOne({ username });
-
-      if (user) {
-          if (await user.checkPassword(password)) {
-              req.session.user = user._id;
-              res.redirect('/');
-          } else {
-              res.render('logreg', { title: 'Вход', error: 'Неверный пароль' });
-          }
+router.post('/logreg', function(req, res, next) {
+  var username = req.body.username
+  var password = req.body.password
+  db.query (`SELECT * FROM user WHERE user.username = '${req.body.username}'`,
+  function(err,users){
+    if(err) return next(err)
+    if(users.length > 0) {
+        var user = users[0];
+      if (password == user.password){
+        req.session.user = user.id
+        res.redirect('/')
       } else {
-          const newUser = new User({ username, password });
-          await newUser.save();
-          req.session.user = newUser._id;
-          res.redirect('/');
+        res.render('logreg', {title: 'Вход'})
       }
-  } catch (err) {
-      next(err);
-  }
+    } else {
+      db.query(`INSERT INTO user (username, password) VALUES ('${username}','${password}')`, function(err, user){
+    if(err) return next(err)
+    req.session.user = user.id
+    res.redirect('/')
+  })
+}
+})
 });
   
 router.post('/logout', function(req, res, next) {
