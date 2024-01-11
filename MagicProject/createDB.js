@@ -10,7 +10,7 @@ async function run() {
         var database = client.db("magic");
         database.dropDatabase()
         database = client.db("magic");
-        const elements = database.collection("elements");
+        const elements = database.collection("elems");
         const result = await elements.insertMany(data);
         console.log(`${result.insertedCount} documents were inserted`);
 } finally {
