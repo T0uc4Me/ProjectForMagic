@@ -8,6 +8,7 @@ mongoose.connect('mongodb://127.0.0.1/magic')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var elems = require('./routes/elems');
 
 var app = express();
 
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/elems', elems);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
