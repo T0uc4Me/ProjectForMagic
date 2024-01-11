@@ -3,15 +3,27 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mongoose = require('mongoose')
-mongoose.connect('mongodb://127.0.0.1/magic')
+//var mongoose = require('mongoose')
+//mongoose.connect('mongodb://127.0.0.1/magic')
 var session = require("express-session")
-
+var mysql2 = require('mysql2/promise');
+var MySQLStore = require('express-mysql-session')(session);
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var elems = require('./routes/elems');
 
 var app = express();
+
+var options = {
+  host : '127.0.0.1',
+  port: '3306',
+  user : 'root',
+  password : '1234',
+  database: 'magic'
+};
+
+var connection = mysql2.createPool(options)
+var sessionStore = new MySQLStore( options, connection);
 
 // view engine setup
 app.engine('ejs',require('ejs-locals'));
@@ -24,15 +36,28 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-var MongoStore = require('connect-mongo');
+
+// var MongoStore = require('connect-mongo');
+// app.use(session({
+//   secret: "Magic",
+//   cookie:{maxAge:60*1000},
+//   resave: true,
+//   saveUninitialized: true,
+//   store: MongoStore.create({mongoUrl: 'mongodb://127.0.0.1/magic'})
+// }))
+
 app.use(session({
-  secret: "Magic",
-  cookie:{maxAge:60*1000},
+  secret: 'Magic',
+  key: 'sid',
+  store: sessionStore,
   resave: true,
   saveUninitialized: true,
-  store: MongoStore.create({mongoUrl: 'mongodb://127.0.0.1/magic'})
-}))
-
+  cookie: { path: '/',
+  httpOnly: true,
+  maxAge: 60*1000
+  }
+}));
+  
 app.use(function(req,res,next){
   req.session.counter = req.session.counter +1 || 1
   next()
