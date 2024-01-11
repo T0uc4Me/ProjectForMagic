@@ -11,12 +11,17 @@
         <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
             <div class="container-fluid">
               <ul class="navbar-nav">
-                <% menu.forEach(function(elem){ %>
+                <% if(typeof nav == 'object' && nav){ nav.forEach(function (elem){
+                  %>
                   <li class="nav-item">
-                  <a class="nav-link"
+                  <a class="nav-link" 
                   href="/elems/<%=elem.nick%>"><%=elem.title%></a>
                   </li>
-                  <% }) %>
+                  <% })} %>
+              </ul>
+            </div>
+          </nav>
+       
               </ul>
             </div>
           </nav>

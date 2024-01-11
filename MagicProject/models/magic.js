@@ -1,17 +1,18 @@
-var mongoose = require('mongoose')
-var Schema = mongoose.Schema
-var ElemSchema = new Schema({
-title: String,
-nick: {
-type: String,
-unique: true,
-required: true
-},
-avatar: String,
-desc: String,
-created:{
-type:Date,
-default:Date.now
-}
-})
-module.exports.Elem = mongoose.model("Elem", ElemSchema)
+const mongoose = require('mongoose');
+
+const ElemSchema = new mongoose.Schema({
+    title: String,
+    nick: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    avatar: String,
+    desc: String,
+    created: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+module.exports.Elem = mongoose.model("Elem", ElemSchema);

@@ -14,6 +14,7 @@ router.get("/:nick", async (req, res, next) => {
             Elem.findOne({ nick: req.params.nick }),
             Elem.find({}, { _id: 0, title: 1, nick: 1 })
           ]);
+
       if (!elem) {
         throw new Error("Стихия испарилась");
       }
@@ -24,14 +25,10 @@ router.get("/:nick", async (req, res, next) => {
   });
 
   function renderMagic(res, title, picture, desc, elems) {
-    console.log(elems);
-  
     res.render('magic', {
         title: title,
         picture: picture,
-        desc: desc,
-        menu:elems
-
+        desc: desc
     });
   }
 
