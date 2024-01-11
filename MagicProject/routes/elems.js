@@ -3,14 +3,14 @@ var router = express.Router();
 //var Elem = require("../models/magic").Elem
 var async = require("async")
 var db = require('../mySQLConnect.js');
-//var checkAuth = require("./../middleware/checkAuth.js")
+var checkAuth = require("./../middleware/checkAuth.js")
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
     res.send('Маршрутизатор 3-х стихий');
 });
 
-router.get("/:nick", function(req, res, next) {
+router.get("/:nick", checkAuth,function(req, res, next) {
   db.query(`SELECT * FROM elements WHERE elements.nick = '${req.params.nick}'`, (err,
   elems) => {
   if(err) {
