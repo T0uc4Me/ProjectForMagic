@@ -1,12 +1,10 @@
-const Elem = require("./../models/magic").Elem;
+const db = require('./../mySQLConnect');
 
-module.exports = async (req, res, next) => {
-    try {
-        res.locals.nav = [];
-        const result = await Elem.find({}, { _id: 0, title: 1, nick: 1 });
-        res.locals.nav = result;
-        next();
-    } catch (err) {
-        next(err);
-    }
+module.exports = function(req, res, next) {
+  res.locals.nav = [];
+  db.query('SELECT title, nick FROM elements', function(err, result) {
+      if (err) throw err;
+      res.locals.nav = result;
+      next();
+  });
 };
